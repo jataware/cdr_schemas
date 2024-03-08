@@ -5,7 +5,7 @@ import subprocess
 
 from pathlib import Path
 
-PACKAGE = "cdrschemas"
+PACKAGE = "cdr_schemas"
 
 
 def __getattr__(name):
