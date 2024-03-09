@@ -19,7 +19,6 @@ flake8 = "^7.0.0"
 isort = "^5.13.2"
 flake8-print = "^5.0.0"
 autoflake = "^2.3.0"
-erdantic = "^0.7.0"
 ipython = "^8.22.2"
 
 [tool.poetry.scripts]
