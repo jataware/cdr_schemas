@@ -9,19 +9,21 @@ class PointType(str, Enum):
 
 
 class Geom_Point(BaseModel):
+    """
+    Geometry Point:
+    Point geometry in world coordinates (longitude, latitude).
+    """
     coordinates:List[Optional[Union[float, int]]]
     type: PointType  = PointType.Point
 
 
 class Pixel_Point(BaseModel):
+    """
+    Pixel point. 
+    Point geometry in pixel coordinates (columns from left, row from bottom).
+    """
     coordinates:List[Union[float, int]]
     type: PointType  = PointType.Point
-
-    # @validator('coordinates', each_item=True)
-    # def check_none_in_coordinates(cls, v):
-    #     if v is None:
-    #         raise ValueError("None value in coordinates is not allowed")
-    #     return v
 
 
 class GroundControlPoint(BaseModel):
