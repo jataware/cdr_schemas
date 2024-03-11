@@ -27,41 +27,43 @@ class Pixel_Point(BaseModel):
 
 
 class GroundControlPoint(BaseModel):
-    """Ground control point model for mapping and georeferencing purposes.
-    
-    Attributes:
-        map_geom (Geom_Point): Point geometry in world coordinates (longitude, latitude).
-        px_geom (Pixel_Point): Point geometry in pixel coordinates (columns from left, row from bottom).
-        confidence (Optional[float]): Confidence associated with this extraction.
-        model (str): Name of the model used.
-        model_version (str): Version of the model.
-        crs (Optional[str]): Coordinate reference system.
     """
+    Ground Control Point
+    """
+    gcp_id: str = Field(..., description="Your internal generated gcp id that helps connect to a raster projection if one is created")
     map_geom: Geom_Point = Field(..., description="Point geometry, world coordinates, [longitude, latitude]")
     px_geom: Pixel_Point = Field(..., description="Point geometry, pixel coordinates, [columns from left, row from bottom]")
     confidence: Optional[float] = Field(..., description="Confidence associated with this extraction")
-    model: str
-    model_version: str
-    crs: Optional[str]
-    
+    model: str = Field(..., description="Name of the model used.")
+    model_version: str = Field(..., description="Version of the model.")
+    crs: Optional[str] = Field(..., description="Coordinate reference system.")
+
+
+class ProjectionResult(BaseModel):
+    """
+    Projection Result
+    """
+    crs: str = Field(..., description="Coordinate reference system used for projection. .ie EPSG:32612")
+    gcp_ids: List[str] = Field(..., description='List of gcp ids used in transform. ie ["1","2"]')
+    file_name: str = Field(..., description="Name of file uploaded for this projection")
+
 
 class GeoreferenceResults(BaseModel):
-    """Georeference Results.
-    
-    Attributes:
-        map_id: Identifier for the map.
-        crs: Projection EPSG code used for projection. ie EPSG:32612
-        likely_CRSs: List of potential Coordinate Reference System specifically Projection Coordinate System for the map. ie ["EPSG:32612", "EPSG:32613"]
-        gcps:  gcps used in the projected raster output
-        unused_gcps: gcps that were not used in the projected raster output
-        system: Name of the system used.
-        system_version: Version of the system.
+    """
+    Georeference Results.
     """
     map_id: str
-    crs: Optional[str] 
-    likely_CRSs: Optional[List[str]]   
-    gcps: Optional[List[GroundControlPoint]]
-    unused_gcps: Optional[List[GroundControlPoint]]
-    system: str  
-    system_version: str 
+    likely_CRSs: Optional[List[str]]   = Field(..., description='''
+                                               List of potential Coordinate Reference System specifically 
+                                               Projection Coordinate System for the map. ie ["EPSG:32612", "EPSG:32613
+                                               ''')
+    gcps: Optional[List[GroundControlPoint]] = Field(..., description='''
+                                               List of all gcps extracted 
+                                               ''')
+    projections: Optional[List[ProjectionResult]]  = Field(..., description='''
+                                                           For each projection raster produced return crs 
+                                                           and gcp ids used in the transform
+                                                           ''')
+    system: str  = Field(..., description='''Name of the system used''')
+    system_version: str  = Field(..., description='''Version of the system.''')
     
